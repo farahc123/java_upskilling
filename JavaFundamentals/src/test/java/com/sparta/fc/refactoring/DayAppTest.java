@@ -5,7 +5,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class AppTest {
+public class DayAppTest {
 
 //    @Test
 //    @DisplayName("My first test")

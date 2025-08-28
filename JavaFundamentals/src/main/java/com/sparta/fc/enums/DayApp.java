@@ -1,11 +1,9 @@
 package com.sparta.fc.enums;
 
-import com.sparta.fc.enums.Day;
-
-public class App {
+public class DayApp {
 
     public static void main(String[] args) {
-        Day dayOfTheWeek = Day.SUNDAY;
+        Day dayOfTheWeek = Day.TUESDAY;
 
         switch (dayOfTheWeek) {
             case MONDAY:
@@ -18,7 +16,6 @@ public class App {
             case FRIDAY:
                 System.out.println("Nearly the weekend!");
                 break;
-
             case SATURDAY:
             case SUNDAY: {
                 System.out.println("Relax and enjoy!");

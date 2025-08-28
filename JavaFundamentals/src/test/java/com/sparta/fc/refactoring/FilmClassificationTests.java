@@ -1,4 +1,4 @@
-package com.sparta.nam.refactoring;
+package com.sparta.fc.refactoring;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

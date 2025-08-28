@@ -1,11 +1,8 @@
 package com.sparta.fc.enums;
 
-    public enum Seasons {
+    public enum SeasonsEnum {
         SPRING,
         SUMMER,
         AUTUMN,
         WINTER
     }
-
-
-}

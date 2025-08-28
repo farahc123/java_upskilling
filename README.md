@@ -6,7 +6,6 @@
   - [Debugging in IntelliJ](#debugging-in-intellij)
   - [Conditionals](#conditionals)
   - [*pom.xml* file](#pomxml-file)
-  - [Access modifiers](#access-modifiers)
 - [Testing with JUnit](#testing-with-junit)
   - [`@Test`](#test)
   - [`ParameterizedTest` (for ranges etc.)](#parameterizedtest-for-ranges-etc)
@@ -19,6 +18,8 @@
   - [Built-in methods](#built-in-methods)
   - [Abstract classes](#abstract-classes)
 - [OOP](#oop)
+  - [Encapsulation](#encapsulation)
+    - [Access modifiers (for methods, classes, \& variables)](#access-modifiers-for-methods-classes--variables)
   - [Polymorphism](#polymorphism)
   - [Inheritance](#inheritance)
 - [Helpful info](#helpful-info)
@@ -62,14 +63,6 @@
 - ***pom.xml***: a fundamental Maven file that defines the config & dependencies for building a Java project
 - within the file, you can right click, choose *Generate dependency*, and search for existing artifacts/classes to insert into the file (note that these use the naming format of `org.package.subpackage:version` e.g. `org.junit.jupiter:junit-jupiter:5.9.3`)
 - once done editing the *pom.xml* file, click the little M icon in the right-hand corner to reload and download the new libraries
-
-## Access modifiers
-
-- **public**:
-- **private**:
-  - cannot be accessed outside  of that class
-  - cannot be overridden
-- **protected**: private to everything EXCEPT sub-classes
 
 # Testing with JUnit
 
@@ -211,9 +204,7 @@ public abstract class Animal {
 # OOP
 
 - **abstraction**:
-  - the concept of classes
-  - which is that classes are blueprints of real-life objects
-- an object is an instance of a class
+  - the concept of classes, which is that classes are blueprints of real-life objects (an object is an instance of a class)
 - **encapsulation**:
   - concept of data hiding & exposing e.g. thru `private` & `public` methods & variables
 - **polymorphism**:
@@ -221,6 +212,17 @@ public abstract class Animal {
   - has two types: **method overriding** & **method overloading** 
 - **inheritance**:
   - a hierarchical relationship between classes (e.g. subclasses)
+
+## Encapsulation
+
+### Access modifiers (for methods, classes, & variables)
+
+- these are how data is exposed & hidden
+
+- **public**: accessible in any class or package
+- **private**: accessible only within the same class
+- **protected**: accessible within the same package and sub-classes
+- **default**: accessible only within the same package (doesn't need to be explicit stated as it's the default)
 
 ## Polymorphism
 

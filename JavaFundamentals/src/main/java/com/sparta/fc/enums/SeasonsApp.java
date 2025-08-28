@@ -1,6 +1,6 @@
 package com.sparta.fc.enums;
 
-public class SeasonApp {
+public class SeasonsApp {
 
     public static void main(String[] args) {
         SeasonsEnum seasonOfYear = SeasonsEnum.SPRING;
@@ -18,6 +18,7 @@ public class SeasonApp {
             System.out.println("It's cold");
         }
 
+        System.out.println("--- Looping through the SeasonsEnum values:");
         for(SeasonsEnum season: SeasonsEnum.values()){
             System.out.println(season);
         }

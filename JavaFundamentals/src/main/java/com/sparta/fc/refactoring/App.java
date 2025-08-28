@@ -1,4 +1,4 @@
-package com.sparta.nam.refactoring;
+package com.sparta.fc.refactoring;
 
 public class App {
     public static void main(String[] args) {

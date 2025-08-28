@@ -1,4 +1,11 @@
 package com.sparta.fc.enums;
 
-public class Day {
-}
+    public enum Day{
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY,
+        SUNDAY
+    }

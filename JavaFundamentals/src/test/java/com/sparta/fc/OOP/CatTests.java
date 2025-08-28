@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class AnimalTests {
+public class CatTests {
 
     // class methods to test: getName(); setName(); getAge(); toString(); speak();
 
@@ -46,6 +46,18 @@ public class AnimalTests {
     }
 
     @Test
+    @DisplayName("getFavouriteFood returns the correct favourite food")
+    public void getFavouriteFoodTest() {
+        
+        // if this was an Animal object, it would hide non-Animal methods like getFavouriteFood
+        Cat sut = new Cat("Whiskers", 2022, 11, 1, "tuna");
+
+        String result = sut.getFavouriteFood();
+
+        Assertions.assertEquals("tuna", result);
+    }
+
+    @Test
     @DisplayName("toString returns the correct string")
     public void toStringTest() {
 
@@ -66,9 +78,5 @@ public class AnimalTests {
 
         Assertions.assertEquals("meow", result);
     }
-
-    // bird tests
-
-
 
 }

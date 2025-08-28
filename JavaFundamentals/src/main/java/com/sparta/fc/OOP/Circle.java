@@ -1,4 +1,14 @@
 package com.sparta.fc.OOP;
+public class Circle extends Shape {
+    private int radius;
 
-public class Circle {
+    public Circle(int radius){
+        this.radius = radius;
+    }
+    @Override
+    public int calculateArea() {
+        return (int) (Math.PI * radius * radius);
+    }
+
+    // this class also inherits the toString() method of the Shape class
 }

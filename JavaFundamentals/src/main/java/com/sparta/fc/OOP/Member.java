@@ -2,6 +2,7 @@ package com.sparta.fc.OOP;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class Member {
     private final String firstName;
@@ -36,6 +37,20 @@ public class Member {
 
     public String toString(){
         return this.getFullName() + " has been a member for " + this.getMemberDays() + " days";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Member member))
+            return false; // checking to see if obj is not an object of the Member class, but if it is, storing it in member variable
+        else { // if it is a member
+            return Objects.equals(this.firstName, member.firstName) && Objects.equals(this.lastName, member.lastName) && Objects.equals(this.joinDate, member.joinDate);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, joinDate);
     }
 }
 

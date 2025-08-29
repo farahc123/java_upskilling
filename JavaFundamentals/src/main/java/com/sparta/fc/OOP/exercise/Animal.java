@@ -2,6 +2,7 @@ package com.sparta.fc.OOP.exercise;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 
 public abstract class Animal {
     private String name;
@@ -33,4 +34,16 @@ public abstract class Animal {
 
     public abstract String speak();
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Animal animal)) return false;
+        else{
+            return Objects.equals(this.name, animal.name) && Objects.equals(this.birthdate, animal.birthdate);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, birthdate);
+    }
 }

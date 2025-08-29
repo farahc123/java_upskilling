@@ -2,6 +2,8 @@
 
 - [Java upskilling notes](#java-upskilling-notes)
   - [Basics](#basics)
+  - [Memory model \& value and reference types](#memory-model--value-and-reference-types)
+    - [Garbage collection](#garbage-collection)
   - [Naming conventions](#naming-conventions)
   - [Debugging in IntelliJ](#debugging-in-intellij)
   - [Conditionals](#conditionals)
@@ -16,17 +18,25 @@
   - [Constructor methods](#constructor-methods)
   - [Static methods](#static-methods)
   - [Built-in methods](#built-in-methods)
+    - [Overriding `.equals()` and `.hashCode()`](#overriding-equals-and-hashcode)
   - [Abstract classes](#abstract-classes)
+  - [`final` keyword](#final-keyword)
 - [OOP](#oop)
   - [Encapsulation](#encapsulation)
     - [Access modifiers (for methods, classes, \& variables)](#access-modifiers-for-methods-classes--variables)
   - [Polymorphism](#polymorphism)
+    - [Interfaces](#interfaces)
   - [Inheritance](#inheritance)
 - [Helpful info](#helpful-info)
   - [IntelliJ plugins](#intellij-plugins)
 
 ## Basics
 
+![Java components](image-4.png)
+
+- the JDK includes everything needed to run your Java code
+- once Java code (stored in *.java* files) is compiled (into *.class* files), it's in byte code, which is then converted into machine-readable code that can be read by different OSes
+- when you run Java code, the JDK runs it on a virtual machine, which are different across OSes
 - the `main` method of a class is where all the code runs from — i.e. it calls all the classes and libraries etc. needed to run an app
 - methods should have a single responsibility to conform to SOLID principles
   - however, production code (e.g. for webapps) **doesn't have a `main` method** because it does not run as an independent thread; instead, it includes classes and methods which are all called somewhere else
@@ -37,6 +47,40 @@
 - use the wildcard `*` to import everything from a package, e.g. `import org.junit.jupiter.api.*`
 - you can use `var` if you want Java to infer the data type of a variable
 - if you want to rename something, right click it, choose *Refactor*, and rename it there — this way, it will rename it everywhere it's used
+- **scope** in Java is outside of the curly brackets
+
+## Memory model & value and reference types
+
+- the RAM contains the stack and the heap
+- depending on the Java data type, it will either be stored in the stack or the heap
+- **stack**:
+  - fast-access memory
+  - last in, first out; when you leave the scope, everything is **popped** from it
+- **heap**:
+  - a larger area of memory holding data belonging to reference types
+  - when a new reference type is created, the system finds space for it on the heap
+- **value types**:
+  - written in lowercase
+  - smaller, simple data types with fixed sizes like int, char, boolean, enum, float
+  - each variable has a copy of its own data
+  - stored in the stack
+- **reference types**:
+  - written in title case
+  - larger and have variable size
+  - e.g. String, Integer, ArrayList
+  - variables containing these data types contain a reference (i.e. an address) in the stack to where to find the data in the memory (the heap)
+  - stored in the heap
+  - use references because copying these may be quicker than copying the object itself (as they are larger)
+
+### Garbage collection
+
+- data stored on the heap that isn't linked to a variable (e.g. if it was originally but has been overwritten with a new value) is a **dead object**
+  - the heap **regularly gets rid of dead objects** (via the **garbage collector**) to prevent them filling up the memory and free up memory
+  - the garbage collector also moves live objects closer to each  other to optimise space (**compaction**)
+- once you go out of scope (i.e. the curly brackets), data in the stack is removed (i.e. not accessible unless you go back into the previous scope)
+- arguments used in method calls are *copied* into method's memory space as *local* parameters (either the value of the address is copied, depending on the argument's type)
+  - if the argument is a value type and it's modified in the method, these modifications are local
+  - if the argument is a reference type and modified, it will modify it globally (unless it has been reassigned to a new variable, which effectively copies the value of a reference type to a new memory address)
 
 ## Naming conventions
 
@@ -188,6 +232,27 @@ for(SeasonsEnum season: SeasonsEnum.values()){
 - `.equals(x)` checks if two objects contain the same value 
 - `.hashCode()` returns unique identifier for object
 
+### Overriding `.equals()` and `.hashCode()`
+
+- you must override both if you're going to override one because they're linked
+- you can do this automatically by right-clicking and choosing *Generate* > *equals() and hashCode()*
+- standard format of overriding `.equals()` so that it returns true when two objects with the same parameter values are the same (this is not the default):
+```
+public boolean equals(Object obj) {
+        if (!(obj instanceof ExampleClass example))
+            return false; // checking to see if obj is not an object of the ExampleClass class, but if it is, storing it in example variable
+        else { // if it is an ExampleClass object
+            return Objects.equals(this.firstName, example.firstName) && Objects.equals(this.lastName, example.lastName) && Objects.equals(this.joinDate, example.joinDate); // do this for every parameter taken by the ExampleClass
+        }
+    }
+```
+- standard format of overriding the `hashCode()` method so that it returns the same hash code if each of an object's parameter values are the same:
+```
+public int hashCode() {
+        return Objects.hash(firstName, lastName, joinDate); // include every parameter taken by the given class (e.g. Member or Animal)
+    }
+```
+
 ## Abstract classes
 
 - the purpose of abstract classes is to ensure that **they can't be instantiated as an object** — their purpose is ***to be derived from***
@@ -200,6 +265,11 @@ public abstract class Animal {
     public abstract String speak();
 }
 ```
+
+## `final` keyword
+
+- if used on a class, it can't have any sub-classes ("vasectomy")
+- if used on a variable, its value can never be changed
 
 # OOP
 
@@ -220,7 +290,7 @@ public abstract class Animal {
 - these are how data is exposed & hidden
 
 - **public**: accessible in any class or package
-- **private**: accessible only within the same class
+- **private**: accessible only within the same class (you can get around this in sub-classes using getters & setters)
 - **protected**: accessible within the same package and sub-classes
 - **default**: accessible only within the same package (doesn't need to be explicit stated as it's the default)
 
@@ -243,6 +313,16 @@ public String toString(){
         return super.toString() + " and is a " + this.getPosition();
     }
 ```
+
+### Interfaces
+
+- single inheritance causes an issue if you want a class to inherit from multiple classes
+- interfaces solve this issue by allowing classes to inherit from them (and there is no limit on them)
+- interfaces are entirely abstract
+- all their methods are abstract -- you just provide the return type and the method name like `void Printable();` or `String move();`
+- you add them to a class like `public class exampleClass implements ExampleInterface` in the method signature
+- if you implement an interface in a concrete class, you **must fill in (i.e. implement) its methods**
+  - however, if you implement an interface in an abstract class, you don't need to implement (fill in) its methods as abstract classes take abstract methods
 
 ## Inheritance
 

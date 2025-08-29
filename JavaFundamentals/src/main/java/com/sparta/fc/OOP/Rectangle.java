@@ -14,6 +14,11 @@ public class Rectangle extends Shape{
         return width * length;
     }
 
+    @Override
+    public String print() {
+        return "I am a rectangle";
+    }
+
     // this class also inherits the toString() method of the Shape class
 }
 

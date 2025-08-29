@@ -1,6 +1,7 @@
 package com.sparta.fc.OOP;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 public class App {
 
@@ -33,13 +34,29 @@ public class App {
         // benefit of OOP is that we can store both the Rectangle and Circle objects in a Shape array
         Shape[] shapes = {rectangle, circle};
 
-        for(Shape shape: shapes){
+        for (Shape shape : shapes) {
             System.out.println(shape);
         }
+
+        Member vineet = new Member("Vineet", "Sethi", 2022, 1, 1);
+        Member vineet2 = new Member("Vineet", "Sethi", 2022, 1, 1);
+        System.out.println(vineet.equals(vineet2));
+
+        HashSet<Member> m = new HashSet<>();
+        m.add(vineet);
+        m.add(vineet2);
+        System.out.println(m);
+
+//        HashSet<Integer> ints = new HashSet<>();
+//        ints.add(1);
+//        ints.add(1); // intentional duplicate
+//        ints.add(2);
+//        System.out.println(ints); // no duplicates
 
 
     }
 }
+
 
 //  create a few more member objects
 /// / print out their names, using the getter methods

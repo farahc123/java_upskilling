@@ -43,7 +43,7 @@ public class BirdTests {
 
         int result = sut.getAge();
 
-        Assertions.assertEquals(3, result);
+        Assertions.assertEquals(2, result);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BirdTests {
 
         String result = sut.toString();
 
-        Assertions.assertEquals("Tweetie is 3 years old and says squawk", result);
+        Assertions.assertEquals("Tweetie is 2 years old and says squawk", result);
     }
 
     @Test
@@ -65,6 +65,6 @@ public class BirdTests {
 
         String result = sut.speak();
 
-        Assertions.assertEquals("squawk", result);
+        Assertions.assertEquals("meow", result);
     }
 }

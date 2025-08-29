@@ -1,7 +1,7 @@
 package com.sparta.fc.OOP;
 
 // Abstract classes can have concrete and abstract methods
-public abstract class Shape {
+public abstract class Shape implements Printable{
     @Override
     public String toString(){
         return getClass().getName() + " Area: " + calculateArea();
@@ -10,5 +10,7 @@ public abstract class Shape {
     // Abstract methods do NOT have a method body
     // BUT derived classes from the abstract clas MUST ahve their own implmentation of the abstract methods from the base class
     public abstract int calculateArea();
+
+
 }
 

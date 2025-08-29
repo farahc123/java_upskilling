@@ -48,7 +48,7 @@ public class CatTests {
     @Test
     @DisplayName("getFavouriteFood returns the correct favourite food")
     public void getFavouriteFoodTest() {
-        
+
         // if this was an Animal object, it would hide non-Animal methods like getFavouriteFood
         Cat sut = new Cat("Whiskers", 2022, 11, 1, "tuna");
 

@@ -2,6 +2,8 @@
 
 - [Java upskilling notes](#java-upskilling-notes)
   - [Basics](#basics)
+  - [Refactoring](#refactoring)
+  - [Code smells](#code-smells)
   - [Memory model \& value and reference types](#memory-model--value-and-reference-types)
     - [Garbage collection](#garbage-collection)
   - [Naming conventions](#naming-conventions)
@@ -27,6 +29,13 @@
   - [Polymorphism](#polymorphism)
     - [Interfaces](#interfaces)
   - [Inheritance](#inheritance)
+- [SOLID principles](#solid-principles)
+- [Collections](#collections)
+  - [ArrayLists](#arraylists)
+  - [HashSets](#hashsets)
+  - [Queues and deques](#queues-and-deques)
+- [Maps](#maps)
+  - [HashMaps](#hashmaps)
 - [Helpful info](#helpful-info)
   - [IntelliJ plugins](#intellij-plugins)
 
@@ -46,8 +55,26 @@
   - **running** code executes those executables
 - use the wildcard `*` to import everything from a package, e.g. `import org.junit.jupiter.api.*`
 - you can use `var` if you want Java to infer the data type of a variable
-- if you want to rename something, right click it, choose *Refactor*, and rename it there — this way, it will rename it everywhere it's used
 - **scope** in Java is outside of the curly brackets
+- **dependency injection**: injecting an implementation of an interface/class/object into another interface/class/object (e.g. `public Person(String fName, String lName, Address address) {...}` which injects an implementation of the Address class into the Person class) -- it's using an interface/object/class etc. as an argument e.g. in a constructor
+- **feature envy**: when a method accesses the data of another object to perform a task -- the method should instead be in that object's definition as methods that deal with a variable should also belong to the class that "owns" the variables
+
+## Refactoring
+
+- **refactoring**: restructuring code to align with best practices (readability, extending, maintaining), ***without modifying its behaviour***
+  - refactor when the code is causing an issue
+  - try to get the code working first via unit tests, and push this working version before refactoring
+- if you want to rename something, right click it, choose *Refactor*, and rename it there — this way, it will rename it everywhere it's used
+
+## Code smells
+
+- **inappropriate names**: names should be clear, concise, and meaningful
+- **redundant comments**: comments need to be maintained along with code, and also should largely be replaced by descriptive & meaningful code
+- **dead code:** code that is never used
+- **duplicate code:** keep code DRY (don't repeat yourself)
+- **long methods**: 2-4 lines, maximum of 20 in a method -- otherwise, check if it's doing what it needs to do or doing more
+- **data clumps**: when the same group of instance variables keep appearing together (e.g. the separate elements of an address always appearing together) -- it might be a better idea for it to be grouped together in a separate class
+- [More here](https://refactoring.guru/refactoring/smells)
 
 ## Memory model & value and reference types
 
@@ -114,6 +141,7 @@
 - **unit tests**: testing that the smallest testable parts of an app (.e.g functions/methods) work correctly in isolation
 - **unit tests effectively document your code**, so they should cover all test boundaries 
 - shouldn't be **any control flow logic in a test** — it should just test boundaries
+- if you are **in any doubt** about changing a test that relies on external input, **consult the product owner** -- benefits need to be weighed
 - write unit tests to test edge cases (i.e. **boundary value analysis**) because exhaustive testing is impossible
 - **boundary value analysis**: testing the boundaries of ranges (e.g. the minimum and maximum, and just outside the range) to ensure the code's logic is correct
   - example edge cases for `timeOfDay`: ![alt text](image-1.png)
@@ -234,7 +262,7 @@ for(SeasonsEnum season: SeasonsEnum.values()){
 
 ### Overriding `.equals()` and `.hashCode()`
 
-- you must override both if you're going to override one because they're linked
+- you must **override both** if you're going to override one because they're linked
 - you can do this automatically by right-clicking and choosing *Generate* > *equals() and hashCode()*
 - standard format of overriding `.equals()` so that it returns true when two objects with the same parameter values are the same (this is not the default):
 ```
@@ -270,6 +298,7 @@ public abstract class Animal {
 
 - if used on a class, it can't have any sub-classes ("vasectomy")
 - if used on a variable, its value can never be changed
+- if used on a method, it can't be overridden
 
 # OOP
 
@@ -289,7 +318,7 @@ public abstract class Animal {
 
 - these are how data is exposed & hidden
 
-- **public**: accessible in any class or package
+- **public**: accessible in any class or package (never make fields public)
 - **private**: accessible only within the same class (you can get around this in sub-classes using getters & setters)
 - **protected**: accessible within the same package and sub-classes
 - **default**: accessible only within the same package (doesn't need to be explicit stated as it's the default)
@@ -297,20 +326,23 @@ public abstract class Animal {
 ## Polymorphism
 
 - different implementations of the same thing
-- there are different types:
-  - **method overriding:** creating a method with the same name & parameters as an existing inherited method, except it does something different — this is *run-time polymorphism*
-  - **method overloading:** methods that have the same method signature, but take different (types or number of) parameters — this is *compile-time polymorphism*
-- example of overriding a built-in method (`.toString()`):
-```
-public String toString(){
-        return this.getFullName() + " has been a member for " + this.getMemberDays() + " days";
-    }
-```
-- example of overriding an inherited method:
+- **method overriding:** creating a method with the same name & parameters as an existing inherited method, except it does something different — this is *run-time polymorphism*
+  - example of overriding an inherited method:
 ```
 @Override
     public String toString(){
         return super.toString() + " and is a " + this.getPosition();
+    }
+```
+- **method overloading:** methods that have the same method signature, but take different (types or number of) parameters — this is *compile-time polymorphism*
+  - example of overloading a method:
+```
+public int add(int a, int b){
+        return a + b;
+    }
+
+    public double add(double a, double b){
+        return a + b;
     }
 ```
 
@@ -319,6 +351,7 @@ public String toString(){
 - single inheritance causes an issue if you want a class to inherit from multiple classes
 - interfaces solve this issue by allowing classes to inherit from them (and there is no limit on them)
 - interfaces are entirely abstract
+- the idea is that unrelated classes can inherit from them
 - all their methods are abstract -- you just provide the return type and the method name like `void Printable();` or `String move();`
 - you add them to a class like `public class exampleClass implements ExampleInterface` in the method signature
 - if you implement an interface in a concrete class, you **must fill in (i.e. implement) its methods**
@@ -348,6 +381,128 @@ public class BaseballMember extends Member{
 - any time you create a class, you inherit from the Object class, which has methods like `.clone()` and `.toString()`
   - some of these built-in methods are private, which mean you can't override them
 - **note that you cannot inherit from `final` classes**
+
+# SOLID principles
+
+- principles that make sure you take advantage of OOP
+
+- **S: Single responsibility**
+  - a class (e.g. testing class) should only have one responsibility (e.g. don't have inventory management, payment, receipts in one programme, and don't have one program do the conditional logic as well as printing out the results)
+  - **benefits**:
+      - fewer test cases for test classes
+      - lower coupling (i.e. fewer dependencies with other classes)
+      - better readability and easier to search smaller, well-organised classes
+- **O: Open/closed**
+  - classes should be **open for extension**, but **closed for modification** (except for fixing bugs) so that the blueprint stays a blueprint and not a specialisation
+  - i.e. create **specialised iterations of objects** (e.g. Shirt class and a BlueShirt class so that non-blue shirts can still inherit from the Shirt class) **don't modify the blueprint**
+  - **benefits**:
+    - stops causing new bugs
+    - allows others to inherit from the same library for their own uses
+- **L: Liskov substitution**
+  - about doing polymorphism correctly & **expected behaviour**
+  - based on the **principle of least astonishment**: a component of a system should behave in a way that most users will expect it to behave, and therefore not astonish or surprise users
+  - if class A is a subtype of class B, we should be able to replace B with A without disrupting the behaviour of the program
+  - i.e. don't inherently change the behaviour of the program (e.g. don't have a penguin class inheriting from a flying bird class, make it a child class of a non-flying bird class)
+  - if every class is implementing the interface `Move`, we expect it can move -- it should do, or it should inherit another interface (**don't just throw an exception** -- this may work code-wise, but doesn't make sense in the real world) 
+- **I: Interface segregation**
+  - larger interfaces should be split into smaller, focused ones that do not force their child classes to implement behaviour they don't need
+  - **benefits**:
+    - ensures that classes that implement interfaces only need to be concerned about the methods of interest to them (e.g. card-only checkouts shouldn't implement an interface with a `giveChange()` method, the interface should be split up)
+- **D: Dependency inversion**
+  - high-level modules should not depend on low-level modules
+  - a module shouldn't care about the implementation details of its dependencies (e.g. a Toaster class shouldn't have to include code on turning the power supply on; that should be the business of the Power class)
+  - modules should depend on abstractions, not concrete implementations
+  - **benefits**:
+    - loose coupling, which allows for flexibility
+
+# Collections
+
+- an advantage of using the Collections interface is that they can be resized
+- you can only use non-primitive data types like String, Integer etc. with objects from the Collections interface
+- interfaces included:
+  - **List**:
+    - ordered
+    - allows duplicates
+    - supports null elements (depending on implementation)
+  - **Set**:
+    - unique values only
+    - unordered (except LinkedHashSet)
+    - one null allowed
+    - includes HashSet, EnumsSet, LinkedHashSet, TreeSet
+  - **Queue**:
+    - first in, first out
+    - cannot be accessed by index
+    - includes PriorityQueue, ArrayQueue
+  - **Deque**:
+    - 
+- have methods like:
+  - `add`
+  - `addAll`
+  - `toArray`
+  - `clear`
+  - 
+
+## ArrayLists
+
+- unlike Arrays, these can be resized and have more methods
+- **List**: an interface that has more methods than an array (e.g. add, set, clear)
+- **ArrayLists**: a class that implements the List interface & inherits its methods; **can be resized**; must use an object as a data type
+  - created like: `ArrayList<Integer> ints = new ArrayList();` or with values like
+```
+ArrayList<Integer> dates = new ArrayList<>(List.of(5, 10, 15, 20, 25));
+dates.add(20); // resizing arraylist by adding
+dates.remove(Integer.valueOf(20)); // removing element by value
+dates.remove(1);
+```
+- **note that you can use `List<data type>` too, but this has some subtle differences from `ArrayList<data type>`, e.g. it won't be able to use ArrayList methods like `.ensureCapacity()` or .`trimToSize()`**
+- example with strings:
+```
+ArrayList<String> alphabetList = new ArrayList<String>();
+        alphabetList.add("A");
+        alphabetList.add("B");
+        alphabetList.add("C");
+        alphabetList.add("D");
+        alphabetList.add("E");
+        alphabetList.add("F");
+        alphabetList.add("G");
+```
+- example methods:
+  - `.size()`: gets length
+  - `.sort()` sorts A-Z
+    - `.sort(Comparator.reverseOrder())` sorts in reverse order
+  - `.add(x)` adds given element to ArrayList
+    - .`addAll(collection)` adds a whole collection of items to a list
+  - `.remove(x)` removes the given element from the list
+    - `.removeIf(x>1)` removes all items from the list that match the given condition
+  - `.replaceAll(x+5)` replaces each item in the list with the result of the given action
+  - `.clear()` removes **all items** from list
+  - `.clone()` creates a copy of the list
+  - `.contains(x)` checks whether x exists in the list
+  - `.forEach(action)` performs an action on element of the list
+  - `.get(0)` returns the element at the given index
+  - `.indexOf(x)` returns the index of the first element in the list that matches the given value
+  -  `.isEmpty()` checks if list is empty
+
+## HashSets
+
+- uses Set interface
+- only contains unique values
+- are ordered by their hashcodes, but not indexed
+- most commonly used to search for elements
+- 
+- 
+
+## Queues and deques
+
+- 
+
+# Maps
+
+- only includes SortedMap
+
+## HashMaps
+
+- 
 
 # Helpful info
 

@@ -11,6 +11,18 @@ import static com.sparta.fc.collections.Lab.countDigitsInString;
 public class countDigitsInStringTest {
 
     @Test
+    @DisplayName("countDigitsInString returns an empty map when given a null value")
+    void returnsEmptyMapForNull(){
+        Assertions.assertTrue(countDigitsInString("").isEmpty());
+    }
+
+    @Test
+    @DisplayName("countDigitsInString returns an empty map when given a value with no digits")
+    void returnsEmptyMapForNoDigits(){
+        Assertions.assertTrue(countDigitsInString("hello").isEmpty());
+    }
+
+    @Test
     @DisplayName("countDigitsInString returns correct count")
     public void countDigitsInStringTest(){
         String input = "a1233bx";

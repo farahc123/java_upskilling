@@ -34,8 +34,16 @@
   - [ArrayLists](#arraylists)
   - [HashSets](#hashsets)
   - [Queues and deques](#queues-and-deques)
+    - [Queues](#queues)
+    - [Deques](#deques)
 - [Maps](#maps)
   - [HashMaps](#hashmaps)
+  - [TreeMaps](#treemaps)
+- [Generics](#generics)
+- [Exceptions (`try`, `catch`)](#exceptions-try-catch)
+  - [Handling unchecked exceptions](#handling-unchecked-exceptions)
+  - [Handling checked exceptions](#handling-checked-exceptions)
+  - [`finally` keyword](#finally-keyword)
 - [Helpful info](#helpful-info)
   - [IntelliJ plugins](#intellij-plugins)
 
@@ -394,22 +402,22 @@ public class BaseballMember extends Member{
       - better readability and easier to search smaller, well-organised classes
 - **O: Open/closed**
   - classes should be **open for extension**, but **closed for modification** (except for fixing bugs) so that the blueprint stays a blueprint and not a specialisation
-  - i.e. create **specialised iterations of objects** (e.g. Shirt class and a BlueShirt class so that non-blue shirts can still inherit from the Shirt class) **don't modify the blueprint**
+  - i.e. create **specialised iterations of objects** and **don't modify the blueprint** (e.g. Shirt class and a BlueShirt class so that non-blue shirts can still inherit from the Shirt class)
   - **benefits**:
     - stops causing new bugs
     - allows others to inherit from the same library for their own uses
 - **L: Liskov substitution**
   - about doing polymorphism correctly & **expected behaviour**
   - based on the **principle of least astonishment**: a component of a system should behave in a way that most users will expect it to behave, and therefore not astonish or surprise users
-  - if class A is a subtype of class B, we should be able to replace B with A without disrupting the behaviour of the program
+  - **a child class should be able to do everything its parent class can** (i.e. if class A is a subtype of class B, we should be able to replace B with A without disrupting the behaviour of the program)
   - i.e. don't inherently change the behaviour of the program (e.g. don't have a penguin class inheriting from a flying bird class, make it a child class of a non-flying bird class)
-  - if every class is implementing the interface `Move`, we expect it can move -- it should do, or it should inherit another interface (**don't just throw an exception** -- this may work code-wise, but doesn't make sense in the real world) 
+  - if every class is implementing the interface `Move`, we expect it can move so it should do, or it should inherit another interface (**don't just throw an exception** -- this may work code-wise, but doesn't make sense in the real world) 
 - **I: Interface segregation**
   - larger interfaces should be split into smaller, focused ones that do not force their child classes to implement behaviour they don't need
   - **benefits**:
     - ensures that classes that implement interfaces only need to be concerned about the methods of interest to them (e.g. card-only checkouts shouldn't implement an interface with a `giveChange()` method, the interface should be split up)
 - **D: Dependency inversion**
-  - high-level modules should not depend on low-level modules
+  - high-level modules should not depend on low-level modules, they should both depend on an abstraction
   - a module shouldn't care about the implementation details of its dependencies (e.g. a Toaster class shouldn't have to include code on turning the power supply on; that should be the business of the Power class)
   - modules should depend on abstractions, not concrete implementations
   - **benefits**:
@@ -494,15 +502,158 @@ ArrayList<String> alphabetList = new ArrayList<String>();
 
 ## Queues and deques
 
+### Queues
+
+- first in, first out,
+- created and modified like:
+```
+Queue<String> myNameQueue = new LinkedList<>();
+        myNameQueue.add("Farah"); // adds to the back of the queue
+        myNameQueue.add("Hannah");
+
+        myNameQueue.peek(); // returns the first thing added to the stack
+        myNameQueue.remove(); // removes the first thing added to the stack
+        myNameQueue.poll(); // returns AND removes the first thing in the queue
+
+```
+
+### Deques
+
+- double-ended queue
+- push and pop (enqueue and dequeue) off the queue (i.e. stack)
+- use cases:
+  - undoing last action
+  - joining a queue
+- created and modified like:
+```
+Deque<String> myNameStack = new ArrayDeque<>()
+myNameStack.push("Farah");
+myNameStack.push("Hannah");
+
+myNameStack.peek(); // returns the last thing added to the stack
+```
 - 
 
 # Maps
 
-- only includes SortedMap
-
 ## HashMaps
 
+- dictionary-like object with a key-value pair
+- initialised with the data type of both e.g. `HashMap<String, Integer>` 
+- no duplicate keys, but duplicate values allowed
+- `.put(exampleKey, exampleValue)`: adds a key-value pair to the HM
+- `.get(exampleKey)`: gets the value associated with a given key 
+- `.remove(exampleKey)`: removes the given pair
+- `.containsKey(exampleKey)`: returns a boolean value of whether the key exists or not
+- `.keySet()`: returns a collection of the keys; useful when iterating over
+- `.values()` returns a collection of the values; useful when iterating over
+
+## TreeMaps
+
 - 
+
+# Generics
+
+- a type of polymorphism (**parametric polymorphism**)
+- allow you to write classes, interfaces, etc. that work with different data types and handle them identically
+- means you don't have to do any casting of types
+- example (note the non-specification of data types in the class creation):
+```
+public class GenericRectangle<E> { // the E can be replaced with anything
+    private E width;
+    private E height;
+}
+``` 
+- you must then specify the data type when you create an object of this class, but it can be any data type, e.g.:
+```
+GenericRectangle<Integer> giRect = new GenericRectangle<>(2, 4);
+GenericRectangle<Double> gdRect = new GenericRectangle<>(2.0,4.0);
+```
+- you may want to set some type limits (via the `extends` keyword) so that not *every* kind of type can be passed to the class & its methods (e.g. if it's a class that only makes sense to pass numbers to, you can specify this)
+  - example:
+```
+public class GenericRectangle<E extends Number> { // the E can be replaced with anything
+    private E width; // these can now only be number-types
+    private E height; // these can now only be number-types
+}
+```
+
+# Exceptions (`try`, `catch`)
+
+- **exception types**:
+  - **checked**: must be handled in the code
+  - **unchecked** or runtime exceptions: only picked up at runtime (e.g. when you try to access an index that doesn't exist, which is an ArrayIndexOutOfBounds exception; or an Arithmetic exception when you try to divide by 0)
+- when an exception is thrown, it creates an Exception object in Java
+- we have to handle all exceptions in Java code, preferably when you're actually calling the code (e.g. `main` method) as the handling code may be different depending on the context
+- the order of the `catch` blocks matters as it won't accept catching specialised exceptions if it's already caught general ones, so you should order these from specific (like `NullPointerException`) >>> general (like `Exception`)
+
+## Handling unchecked exceptions
+
+- preferably do this when the method is called
+```
+try {
+            System.out.println(myDog.getName());
+            System.out.println(myCat.getName()); // will throw an exception
+        } catch(NullPointerException ex) {
+            System.out.println("Sorry, that animal does not have a name");
+        }
+```
+- or catch it in the original class:
+```
+public String getName() {
+        try{
+            return name.toUpperCase();
+        }
+        catch(NullPointerException ex){
+            System.out.println("---Caught: " + ex);
+            System.out.println("---Message: " + ex.getMessage());
+            return "No name";
+        }
+    }
+```
+
+## Handling checked exceptions
+
+- add the exception to the method signature (IntelliJ can do this automatically):
+```
+public void setVaccinationDate(String dateString) throws ParseException {
+        vaccinationDate = new SimpleDateFormat("dd-MM-yyy").parse(dateString);
+    }
+```
+- and then handle it in the calling method, e.g.:
+```
+try {
+            myDog.setVaccinationDate("31-02-2020"); // will throw an exception
+        } catch (ParseException e) {
+            System.out.println("Sorry, that date is invalid");
+        }
+```
+- or handle it in the class with a try/catch block (less preferable):
+```
+public void setVaccinationDate(String dateString){
+        try {
+            vaccinationDate = new SimpleDateFormat("dd-MM-yyy").parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+```
+
+## `finally` keyword
+
+- the code in this block (included after a `try`/`catch` block pair) will run **whether or not there is an exception thrown**
+```
+      try {
+            System.out.println(myDog.getName());
+            System.out.println(myCat.getName()); // will throw an exception
+        }
+      catch(NullPointerException ex) {
+            System.out.println("Sorry, that animal does not have a name");
+        }
+      finally {
+            System.out.println("This will always run");
+        }
+```
 
 # Helpful info
 

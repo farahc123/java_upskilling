@@ -1,6 +1,6 @@
 package com.sparta.fc.SOLID.bird.good;
 
-// ---------------- SRP & ISP: Each class/interface has one responsibility and can be cherry-picked ----------------
+// ---------------- ISP: Each class/interface has one responsibility and can be cherry-picked ----------------
 interface Eater {
     void eat();
 }
@@ -17,7 +17,7 @@ interface SoundMaker {
     void makeSound();
 }
 
-// ---------------- LSP: Subtypes can be used interchangeably ----------------
+// ---------------- SRP & LSP: Subtypes can be used interchangeably and class only has single responsibility ----------------
 class Bird implements Eater, Flyer, SoundMaker {
     private String name;
 
@@ -65,15 +65,15 @@ class Penguin implements Eater, Swimmer, SoundMaker {
 }
 
 // ---------------- DIP: Depend on abstractions, not concrete classes ----------------
-class AnimalWatcher {
-    private Eater eater;
+class FlyerWatcher {
+    private Flyer flyer;
 
-    public AnimalWatcher(Eater eater) {  // depends on abstraction
-        this.eater = eater;
+    public FlyerWatcher(Flyer flyer) {  // depends on abstraction
+        this.flyer = flyer;
     }
 
-    public void watchEating() {
-        eater.eat();
+    public void watchFlying() {
+        flyer.fly();
     }
 }
 

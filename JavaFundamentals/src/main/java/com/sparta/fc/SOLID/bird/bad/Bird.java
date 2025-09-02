@@ -1,6 +1,13 @@
 package com.sparta.fc.SOLID.bird.bad;
 
-class Bird {
+// Violates **ISP**: clients forced to use methods they don't need
+interface Animal {
+    void eat();
+    void fly();
+    void swim();
+}
+
+class Bird implements Animal{
     public String name;
 
     public Bird(String name) {
@@ -16,6 +23,12 @@ class Bird {
         System.out.println(name + " is eating");
     }
 
+    // Violates **LSP**: Imagine we extend Bird for Penguin
+    // Penguin cannot fly, so replacing Bird with Penguin would break fly()
+    public void swim() {
+        System.out.println(name + " swims");
+    }
+
     // Violates **OCP**: adding new behavior requires changing this class
     public void makeSound(String type) {
         if (type.equals("chirp")) {
@@ -24,19 +37,6 @@ class Bird {
             System.out.println(name + " squawks");
         }
     }
-
-    // Violates **LSP**: Imagine we extend Bird for Penguin
-    // Penguin cannot fly, so replacing Bird with Penguin would break fly()
-    public void swim() {
-        System.out.println(name + " swims");
-    }
-}
-
-// Violates **ISP**: clients forced to use methods they don't need
-interface Animal {
-    void eat();
-    void fly();
-    void swim();
 }
 
 // Violates **DIP**: High-level class depends directly on low-level implementation

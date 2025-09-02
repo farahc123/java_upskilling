@@ -21,8 +21,22 @@ public class longWordListTest {
         Assertions.assertTrue(result.contains("grass"));
         Assertions.assertFalse(result.contains("The"));
         Assertions.assertFalse(result.contains("is"));
+    }
 
+    @Test
+    @DisplayName("longWordListTest should return an empty ArrayList when no words of 5 or more characters are passed")
+    public void longWordListTestShortWords(){
+        ArrayList<String> result = Lab.longWordList("The dog eats");
 
+        Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("longWordListTest should return an empty ArrayList when no words are passed")
+    public void longWordListTestNull(){
+        ArrayList<String> result = Lab.longWordList("");
+
+        Assertions.assertTrue(result.isEmpty());
     }
 
 }

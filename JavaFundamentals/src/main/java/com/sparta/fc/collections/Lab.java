@@ -16,7 +16,7 @@ public class Lab {
     }
 
     public static ArrayList<String> longWordList(String phrase){
-        String[] words = phrase.split(" ");
+        String[] words = phrase.split("\\s,*");
 
         ArrayList<String> result = new ArrayList<>();
         for(String word: words){

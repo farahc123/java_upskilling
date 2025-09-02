@@ -23,10 +23,20 @@ public class Animal {
     }
 
     public String getName() {
+        try{
+            return name.toUpperCase();
+        } catch(NullPointerException ex){
+            System.out.println("Caught exception " + ex);
+            System.out.println("Message " + ex.getMessage());
+            return "No name";
+        }
+    }
+
+    // unchecked exception
+    public void setName(String name) {
         if(name == null){
             throw new NullPointerException("Name must not be null");
-        }
-        return name.toUpperCase();
+        } this.name = name;
     }
 
     public int getAge() {
@@ -41,11 +51,14 @@ public class Animal {
         age = newAge;
     }
 
-    // unchecked exception
-    public void setName(String name) {
-        if(name == null){
-            throw new NullPointerException("Name must not be null");
-        } this.name = name;
+    public Date getVaccinationDate() {
+        return vaccinationDate;
+    }
+
+    // checked exception
+    public void setVaccinationDate(String dateString) throws ParseException {
+        vaccinationDate = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
+
     }
 
     @Override
@@ -55,25 +68,5 @@ public class Animal {
                 ", age=" + age +
                 ", vaccinationDate=" + vaccinationDate +
                 '}';
-    }
-
-    public String getName_Handled(){
-        try{
-            return name.toUpperCase();
-        } catch(NullPointerException ex){
-            System.out.println("Caught exception " + ex);
-            System.out.println("Message " + ex.getMessage());
-            return "No name";
-        }
-    }
-
-    public Date getVaccinationDate() {
-        return vaccinationDate;
-    }
-
-    // checked exception
-    public void setVaccinationDate(String dateString) throws ParseException {
-        vaccinationDate = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
-
     }
 }

@@ -1,10 +1,28 @@
 package com.sparta.fc.OOP;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class MemberTests {
+
+    @BeforeAll
+    public static void beforeAll() { // runs once only, and all following test methods can use any variables defined here
+        System.out.println("---before all");
+    }
+
+    @BeforeEach
+    public void beforeEach() { // runs before each test method
+        System.out.println("---before each");
+    }
+
+    @AfterEach
+    public void afterEach() { // runs after each test method
+        System.out.println("---after each");
+    }
+
+    @AfterAll
+    public static void afterAll(){ // runs after all test methods have been run
+        System.out.println("---after all");
+    }
 
     @Test
     @DisplayName("getFirstName returns the correct name")

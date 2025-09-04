@@ -1,7 +1,10 @@
 package com.sparta.fc.OOP;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -9,6 +12,20 @@ public class App {
         Member nish = new Member("Nish", "Mandal", 2022, 1, 1); // returns a member with these values
         Member farah = new Member("Farah", "Cheded", 2025, 5, 4);
         Member zainab = new Member("Zainab", "Farooq", 2024, 6, 17);
+
+        // Original list of members
+        List<Member> membersLambda = new ArrayList<>(List.of(nish, farah, zainab));
+
+        // Filter members with >600 days
+        List<Member> filtered = membersLambda.stream()
+                .filter(mem -> mem.getMemberDays() > 600)
+                .collect(Collectors.toList()); // works on all Java versions
+
+        // Print filtered list
+        System.out.println("----------- Filtered Members -----------");
+        System.out.println(filtered);
+
+
         System.out.println("--- Members and days:");
         System.out.println(farah.getFullName() + " has been a member for " + farah.getMemberDays() + " days");
         System.out.println(zainab.getFullName() + " has been a member for " + zainab.getMemberDays() + " days");

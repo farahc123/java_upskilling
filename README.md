@@ -13,12 +13,16 @@
 - [Testing with JUnit](#testing-with-junit)
   - [`@Test`](#test)
   - [`ParameterizedTest` (for ranges etc.)](#parameterizedtest-for-ranges-etc)
+  - [BeforeAll, BeforeEach, AfterAll, AfterEach](#beforeall-beforeeach-afterall-aftereach)
+  - [Order](#order)
+  - [Hamcrest](#hamcrest)
 - [Data types](#data-types)
   - [Enums](#enums)
   - [Dates and times](#dates-and-times)
 - [Methods](#methods)
   - [Constructor methods](#constructor-methods)
   - [Static methods](#static-methods)
+  - [Static variables](#static-variables)
   - [Built-in methods](#built-in-methods)
     - [Overriding `.equals()` and `.hashCode()`](#overriding-equals-and-hashcode)
   - [Abstract classes](#abstract-classes)
@@ -38,12 +42,17 @@
     - [Deques](#deques)
 - [Maps](#maps)
   - [HashMaps](#hashmaps)
-  - [TreeMaps](#treemaps)
 - [Generics](#generics)
 - [Exceptions (`try`, `catch`)](#exceptions-try-catch)
   - [Handling unchecked exceptions](#handling-unchecked-exceptions)
   - [Handling checked exceptions](#handling-checked-exceptions)
   - [`finally` keyword](#finally-keyword)
+- [File I/O](#file-io)
+- [Logging](#logging)
+  - [Console handler](#console-handler)
+  - [File handler](#file-handler)
+- [Streams](#streams)
+- [Lambda expressions](#lambda-expressions)
 - [Helpful info](#helpful-info)
   - [IntelliJ plugins](#intellij-plugins)
 
@@ -207,6 +216,29 @@ public void getGreeting_GivenATimeOf21_ReturnsGoodEvening(){
 ```
   - however, the testing best practice is to **split tests up so that they are readable and clearly document the code, so it's better to use `@ValueSource`**
 
+## BeforeAll, BeforeEach, AfterAll, AfterEach
+
+- `BeforeAll` runs once before all tests, and must be static (as it needs to be accessible by the other methods in the test class)
+- `BeforeEach` runs before each test, and can't be static (as it needs to be independent)
+- `AfterAll` runs once after all tests, and must be static (as it needs to be accessible by the other methods in the test class)
+- `AfterEach` runs after each test, and can't be static (as it needs to be independent)
+
+## Order
+
+- 
+
+## Hamcrest
+
+- a testing framework that allows you to write more flexible tests
+- makes unit tests more readable
+- the failure method (when a test fails) is more descriptive
+- examples for `String testString = "The quick brown fox jumps over the lazy dog.";`:
+  - `assertThat(exampleResult, is(expectedResult))`
+  - `assertThat(testString, startsWith("The"));`
+  - `assertThat(testString, containsStringIgnoringCase("the"));`
+  - `assertThat(testString, stringContainsInOrder("quick", "jump", "lazy"));`
+  - `assertThat(testString, not(emptyOrNullString()));`
+
 # Data types
 
 ## Enums
@@ -256,7 +288,12 @@ for(SeasonsEnum season: SeasonsEnum.values()){
 ## Static methods
 
 - belong to the class itself, not the instances, e.g. `Math.pow()` is static
+- can be run without the class having an object
 - to use non-static methods, you have to create an object of the class first e.g. `Member me = new Member();`  
+
+## Static variables
+
+- can be used by the entire class
 
 ## Built-in methods
 
@@ -497,8 +534,6 @@ ArrayList<String> alphabetList = new ArrayList<String>();
 - only contains unique values
 - are ordered by their hashcodes, but not indexed
 - most commonly used to search for elements
-- 
-- 
 
 ## Queues and deques
 
@@ -532,7 +567,6 @@ myNameStack.push("Hannah");
 
 myNameStack.peek(); // returns the last thing added to the stack
 ```
-- 
 
 # Maps
 
@@ -547,10 +581,6 @@ myNameStack.peek(); // returns the last thing added to the stack
 - `.containsKey(exampleKey)`: returns a boolean value of whether the key exists or not
 - `.keySet()`: returns a collection of the keys; useful when iterating over
 - `.values()` returns a collection of the values; useful when iterating over
-
-## TreeMaps
-
-- 
 
 # Generics
 
@@ -581,11 +611,12 @@ public class GenericRectangle<E extends Number> { // the E can be replaced with 
 # Exceptions (`try`, `catch`)
 
 - **exception types**:
-  - **checked**: must be handled in the code
+  - **checked**: must be handled in the code before running (e.g. `throws ParseException`)
   - **unchecked** or runtime exceptions: only picked up at runtime (e.g. when you try to access an index that doesn't exist, which is an ArrayIndexOutOfBounds exception; or an Arithmetic exception when you try to divide by 0)
 - when an exception is thrown, it creates an Exception object in Java
 - we have to handle all exceptions in Java code, preferably when you're actually calling the code (e.g. `main` method) as the handling code may be different depending on the context
 - the order of the `catch` blocks matters as it won't accept catching specialised exceptions if it's already caught general ones, so you should order these from specific (like `NullPointerException`) >>> general (like `Exception`)
+- `throws` is used in the method signature of a method that has a checked exception **to tell people the method can throw an exception**, whereas `throw` is used in a method body to **actually throw the exception**
 
 ## Handling unchecked exceptions
 
@@ -653,6 +684,95 @@ public void setVaccinationDate(String dateString){
       finally {
             System.out.println("This will always run");
         }
+```
+
+# File I/O
+
+- Java has 2 packages for file operations: `java.io` (original) and `java.nio` (new)
+- `java.nio` is easier to use and better at throwing exceptions
+- `Files.readAllLines()` is a good method for small files; it reads everything at once
+- if the file is 100s or 1000s of lines long, though, use `Files.newBufferedReader` as it will then read line by line (so you don't have to wait for all the output, and so it doesn't overwhelm system resources)
+
+# Logging
+
+- start logging with `public static final Logger LOGGER = Logger.getLogger(App.class.getName()); // only logs for this class` (changing `App` to whatever the class name is)
+- levels of logging:
+  1. SEVERE (highest)
+  2. WARNING
+  3. INFO
+  4. CONFIG
+  5. FINE
+  6. FINER
+  7. FINEST (lowest) 
+- set logs to a given level and above like `LOGGER.setLevel(Level.WARNING);` which will log `WARNING` logs and above
+- log all levels with `logger.setLevel(Level.ALL)`
+- turn off logging completely with `logger.setLevel(Level.OFF)`
+- - you can set the logging level in your code (e.g. in a `catch` block if an exception is thrown) by adding a line like `LOGGER.log(Level.WARNING, "WARNING: this has been logged as a warning");`
+- Apache Log4j is good for Java logging
+  
+## Console handler
+
+- by default, the console handler will only output a log event if it's `INFO` level or above
+- you can override it like:
+```
+ConsoleHandler consoleHandler = new ConsoleHandler();
+consoleHandler.setLevel(Level.FINE); // or another minimum level
+
+LOGGER.addHandler(consoleHandler); // puts the handler into action
+LOGGER.setUseParentHandlers(false); // tells java not to use the default handler, which means we won't get duplicate console messages
+```
+- you can change the format of the console logs like `consoleHandler.setFormatter(XMLFormatter());`
+
+## File handler
+
+- good practice to add logging for all projects
+- creates a log file
+```
+try{
+ FileHandler fileHandler = new FileHandler("src/main/resources/example.log", true);
+ fileHandler.setFormatter(new SimpleFormatter());
+ LOGGER.addHandler(fileHandler);
+  } // true means the file won't be overwritten each time, just appended with new events
+catch(Exception e){
+  e.printStackTrace();
+  }
+```
+
+# Streams
+
+- a way to process collections of data in a functional manner (alternative to a loop)
+- represents a sequence of all the elements in a collection
+- more declarative (i.e. functional) than imperative (step-by-step, e.g. `for` loops)
+- e.g.:
+```
+ArrayList<String> beatles = new ArrayList<>(List.of("John", "Paul", "George", "Ringo"));
+beatles.stream().forEach(System.out::println);
+```
+- filtering with streams (i.e. iterating with a condition):
+```
+beatles.stream()
+                .filter(name -> name.startsWith("J"))
+                .forEach(name -> System.out.println(name));
+
+```
+- applying methods with streams:
+```
+beatles.stream()
+                .filter(App::startsWithJ) // assuming I've created a startsWithJ method and I'm in an App class
+                .forEach(name -> System.out.println(name));
+```
+
+# Lambda expressions
+
+- shorter way of running some code
+- format: `arg -> expression to run on arg`
+- e.g. checking a number is even: `num -> num % 2 == 0`
+- combining with a stream like `beatles.stream().filter(name -> name.startsWith("J")).forEach(name -> System.out.println(name))`
+- this can be further shortened with a method reference like:
+```
+beatles.stream()
+       .filter(name -> name.startsWith("J"))
+       .forEach(System.out::println);
 ```
 
 # Helpful info

@@ -768,6 +768,7 @@ beatles.stream()
 - format: `arg -> expression to run on arg`
 - e.g. checking a number is even: `num -> num % 2 == 0`
 - combining with a stream like `beatles.stream().filter(name -> name.startsWith("J")).forEach(name -> System.out.println(name))`
+- method reference format: `Class::method`
 - this can be further shortened with a method reference like:
 ```
 beatles.stream()

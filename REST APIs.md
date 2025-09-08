@@ -42,6 +42,7 @@
   - the service you want to access, actions you want to perform & target of the action is usually URIs (uniform resource identifiers) & HTTP methods (GET, POST, PUT, PATCH, DELETE)
   - JSON is most commonly used to represent data, but XML & HTML are sometimes too
   - a REST API can be described & documented with Swagger/OpenAPI
+- **response entity**: class that allows you to customise HTTP responses (headers, codes, etc.)
 
 ## REST implementation
 

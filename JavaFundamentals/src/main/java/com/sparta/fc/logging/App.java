@@ -5,7 +5,7 @@ import java.util.logging.*;
 
 public class App {
 
-    public static final Logger LOGGER = Logger.getLogger(App.class.getName()); // only logs for this class
+    public static final Logger LOGGER = Logger.getLogger(App.class.getName()); // only logs for this class and method
 
     public static void main() throws IOException {
 

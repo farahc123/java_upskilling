@@ -120,7 +120,7 @@
 
 - data stored on the heap that isn't linked to a variable (e.g. if it was originally but has been overwritten with a new value) is a **dead object**
   - the heap **regularly gets rid of dead objects** (via the **garbage collector**) to prevent them filling up the memory and free up memory
-  - the garbage collector also moves live objects closer to each  other to optimise space (**compaction**)
+  - the garbage collector also moves live objects closer to each other to optimise space (**compaction**)
 - once you go out of scope (i.e. the curly brackets), data in the stack is removed (i.e. not accessible unless you go back into the previous scope)
 - arguments used in method calls are *copied* into method's memory space as *local* parameters (either the value of the address is copied, depending on the argument's type)
   - if the argument is a value type and it's modified in the method, these modifications are local
